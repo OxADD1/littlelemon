@@ -4,6 +4,7 @@ import SwiftUI
 let kFirstName = "first name key"
 let kLastName = "last name key"
 let kEmail = "email key"
+let kIsLoggedIn = "kIsLoggedIn"
 
 // Funktion zur Überprüfung der E-Mail-Syntax (einfache Version)
 func isValidEmail(_ email: String) -> Bool {
@@ -36,6 +37,7 @@ struct Onboarding: View {
                         UserDefaults.standard.set(firstName, forKey: kFirstName)
                         UserDefaults.standard.set(lastName, forKey: kLastName)
                         UserDefaults.standard.set(email, forKey: kEmail)
+                        UserDefaults.standard.set(true, forKey: kIsLoggedIn)
                         
                         // Leere Fehlermeldung, da alles korrekt ist
                         errorMessage = ""
@@ -56,6 +58,11 @@ struct Onboarding: View {
             // Verwende den .navigationDestination Modifikator innerhalb des NavigationStack
             .navigationDestination(isPresented: $isLoggedIn) {
                 Home()
+            }
+            .onAppear{
+                if UserDefaults.standard.bool(forKey: kIsLoggedIn) {
+                    isLoggedIn = true
+                }
             }
         }
     }
