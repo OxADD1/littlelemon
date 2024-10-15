@@ -24,7 +24,7 @@ struct Menu: View {
     func getMenuData() {
         let urlString = "https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/menu.json"
         guard let url = URL(string: urlString) else {
-            print("Invalid URL")
+            print("Ungültige URL")
             return
         }
         
@@ -32,25 +32,27 @@ struct Menu: View {
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("Error fetching data: \(error)")
+                print("Fehler beim Abrufen der Daten: \(error)")
                 return
             }
             
             guard let data = data else {
-                print("No data received")
+                print("Keine Daten erhalten")
                 return
             }
             
+            let decoder = JSONDecoder()
             do {
-                let decoder = JSONDecoder()
-                let menuData = try decoder.decode(MenuList.self, from: data)
+                let menuList = try decoder.decode(MenuList.self, from: data)
+                let menuItems = menuList.menu
                 
-                // Auf dem Hauptthread aktualisieren
+                // Hier rufen wir die Funktion auf, um die Daten in Core Data zu speichern
                 DispatchQueue.main.async {
-                    menuItems = menuData.menu
+                    self.menuItems = menuItems  // Hier die menuItems aktualisieren
+                    PersistenceController.shared.saveMenuItemsToCoreData(menuItems: menuItems)
                 }
             } catch {
-                print("Error decoding JSON: \(error)")
+                print("Fehler beim Dekodieren: \(error)")
             }
         }
         
