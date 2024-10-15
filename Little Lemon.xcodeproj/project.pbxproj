@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		DA0DCF032CB2B99400E006E4 /* Little Lemon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Little Lemon.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA74AD4A2CBF15C300098B2B /* Little Lemon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Little Lemon.app"; path = "/Users/adrianeberhardt/Documents/Code/XCODE/finalProject/Little Lemon/build/Debug-iphoneos/Little Lemon.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,16 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				DA0DCF052CB2B99400E006E4 /* Little Lemon */,
-				DA0DCF042CB2B99400E006E4 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		DA0DCF042CB2B99400E006E4 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				DA0DCF032CB2B99400E006E4 /* Little Lemon.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -67,7 +58,7 @@
 			packageProductDependencies = (
 			);
 			productName = "Little Lemon";
-			productReference = DA0DCF032CB2B99400E006E4 /* Little Lemon.app */;
+			productReference = DA74AD4A2CBF15C300098B2B /* Little Lemon.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -95,7 +86,7 @@
 			mainGroup = DA0DCEFA2CB2B99400E006E4;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = DA0DCF042CB2B99400E006E4 /* Products */;
+			productRefGroup = DA0DCEFA2CB2B99400E006E4;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
