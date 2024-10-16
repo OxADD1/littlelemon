@@ -7,7 +7,7 @@ struct PersistenceController {
     let container: NSPersistentContainer
 
     init() {
-        container = NSPersistentContainer(name: "LittleLemonModel") // Name der xcdatamodeld-Datei
+        container = NSPersistentContainer(name: "ExampleDatabase") // Name der xcdatamodeld-Datei
 
         if let description = container.persistentStoreDescriptions.first {
             description.url = URL(fileURLWithPath: "/dev/null")
