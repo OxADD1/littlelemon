@@ -23,6 +23,9 @@ struct Menu: View {
     
     // Methode zum Abrufen der Menüdaten
     func getMenuData() {
+        // Datenbank leeren, bevor neue Daten hinzugefügt werden
+        PersistenceController.shared.clear()
+        
         let urlString = "https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/menu.json"
         guard let url = URL(string: urlString) else {
             print("Ungültige URL")
@@ -47,10 +50,25 @@ struct Menu: View {
                 let menuList = try decoder.decode(MenuList.self, from: data)
                 let menuItems = menuList.menu
                 
-                // Hier rufen wir die Funktion auf, um die Daten in Core Data zu speichern
+                // Menüelemente in Core Data speichern
                 DispatchQueue.main.async {
-                    self.menuItems = menuItems  // Hier die menuItems aktualisieren
-                    PersistenceController.shared.saveMenuItemsToCoreData(menuItems: menuItems)
+                    self.menuItems = menuItems  // Hier die menuItems für die Liste aktualisieren
+                    
+                    // Durch jedes Menüelement iterieren und in Core Data speichern
+                    for menuItem in menuItems {
+                        let dish = Dish(context: viewContext)
+                        dish.name = menuItem.title
+                        dish.image = menuItem.image
+                        dish.price = Float(menuItem.price) ?? 0.0
+                        
+                        // Core Data speichern
+                        do {
+                            try viewContext.save()
+                            print("Erfolgreich gespeichert: \(menuItem.title)")
+                        } catch {
+                            print("Fehler beim Speichern in Core Data: \(error)")
+                        }
+                    }
                 }
             } catch {
                 print("Fehler beim Dekodieren: \(error)")
