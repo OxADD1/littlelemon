@@ -9,10 +9,26 @@ struct Menu: View {
             Text("Little Lemon Restaurant")
             Text("Albstadt")
             Text("Beste Restaurant in der Stadt")
-            List(menuItems) { item in
-                VStack(alignment: .leading) {
-                    Text(item.title)
-                    Text("Price: \(item.price)")
+            FetchedObjects(predicate: NSPredicate(value: true)) { (dishes: [Dish]) in
+                List {
+                    ForEach(dishes) { dish in
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(dish.name ?? "Unbekanntes Gericht")
+                                Text("Price: \(String(format: "%.2f", dish.price))")
+                            }
+                            if let imageUrl = dish.image, let url = URL(string: imageUrl) {
+                                AsyncImage(url: url) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 100, height: 100)
+                                } placeholder: {
+                                    Color.gray.frame(width: 100, height: 100)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
