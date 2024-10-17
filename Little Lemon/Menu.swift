@@ -3,12 +3,20 @@ import SwiftUI
 struct Menu: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var menuItems: [MenuItem] = []
+    @State private var searchText = ""  // Neue Variable für die Suche
     
     var body: some View {
         VStack {
             Text("Little Lemon Restaurant")
             Text("Albstadt")
             Text("Beste Restaurant in der Stadt")
+            
+            // Neues TextField für die Suche
+            TextField("Search menu", text: $searchText)
+                .padding()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            
+            // Sortierte und gefilterte Gerichte
             FetchedObjects(predicate: NSPredicate(value: true), sortDescriptors: buildSortDescriptors()) { (dishes: [Dish]) in
                 List {
                     ForEach(dishes) { dish in
