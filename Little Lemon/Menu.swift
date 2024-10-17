@@ -3,21 +3,21 @@ import SwiftUI
 struct Menu: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var menuItems: [MenuItem] = []
-    @State private var searchText = ""  // Neue Variable für die Suche
-    
+    @State private var searchText: String = "" // Suchfeld-Text
+
     var body: some View {
         VStack {
             Text("Little Lemon Restaurant")
             Text("Albstadt")
             Text("Beste Restaurant in der Stadt")
             
-            // Neues TextField für die Suche
+            // Suchfeld hinzufügen
             TextField("Search menu", text: $searchText)
                 .padding()
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             
-            // Sortierte und gefilterte Gerichte
-            FetchedObjects(predicate: NSPredicate(value: true), sortDescriptors: buildSortDescriptors()) { (dishes: [Dish]) in
+            // Menüelemente mit Sortierung und Filterung anzeigen
+            FetchedObjects(predicate: buildPredicate(), sortDescriptors: buildSortDescriptors()) { (dishes: [Dish]) in
                 List {
                     ForEach(dishes) { dish in
                         HStack {
@@ -42,6 +42,17 @@ struct Menu: View {
         }
         .onAppear {
             getMenuData()
+        }
+    }
+    
+    // Funktion zum Erstellen des NSPredicate für die Filterung
+    func buildPredicate() -> NSPredicate {
+        if searchText.isEmpty {
+            // Zeige alle Gerichte, wenn das Suchfeld leer ist
+            return NSPredicate(value: true)
+        } else {
+            // Filtere Gerichte basierend auf dem Namen
+            return NSPredicate(format: "name CONTAINS[cd] %@", searchText)
         }
     }
     
