@@ -1,15 +1,21 @@
 import SwiftUI
-
+import CoreData
 struct Menu: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var menuItems: [MenuItem] = []
+    @State private var searchText: String = ""
     
     var body: some View {
         VStack {
             Text("Little Lemon Restaurant")
             Text("Albstadt")
             Text("Beste Restaurant in der Stadt")
-            FetchedObjects(predicate: NSPredicate(value: true)) { (dishes: [Dish]) in
+            
+            TextField("Search menu", text: $searchText)
+                .padding()
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+            
+            FetchedObjects(predicate: buildPredicate(), sortDescriptors: buildSortDescriptors()) { (dishes: [Dish]) in
                 List {
                     ForEach(dishes) { dish in
                         HStack {
@@ -37,8 +43,38 @@ struct Menu: View {
         }
     }
     
+    // Funktion zum Sortieren der Menüelemente nach Titel
+    func buildSortDescriptors() -> [NSSortDescriptor] {
+        return [NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))]
+    }
+    
+    // Funktion zum Erstellen des Prädikats für die Suche
+    func buildPredicate() -> NSPredicate {
+        if searchText.isEmpty {
+            return NSPredicate(value: true)
+        } else {
+            return NSPredicate(format: "name CONTAINS[cd] %@", searchText)
+        }
+    }
+    
     // Methode zum Abrufen der Menüdaten
     func getMenuData() {
+        // Überprüfe, ob bereits Menüelemente in Core Data vorhanden sind
+        let fetchRequest: NSFetchRequest<Dish> = Dish.fetchRequest()
+        
+        do {
+            let dishCount = try viewContext.count(for: fetchRequest)
+            
+            if dishCount > 0 {
+                // Daten sind bereits in Core Data, keine neuen Daten abrufen
+                print("Menüelemente bereits vorhanden, kein erneutes Abrufen erforderlich")
+                return
+            }
+        } catch {
+            print("Fehler beim Abrufen der Daten aus Core Data: \(error)")
+            return
+        }
+        
         // Datenbank leeren, bevor neue Daten hinzugefügt werden
         PersistenceController.shared.clear()
         
