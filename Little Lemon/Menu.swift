@@ -9,7 +9,7 @@ struct Menu: View {
             Text("Little Lemon Restaurant")
             Text("Albstadt")
             Text("Beste Restaurant in der Stadt")
-            FetchedObjects(predicate: NSPredicate(value: true)) { (dishes: [Dish]) in
+            FetchedObjects(predicate: NSPredicate(value: true), sortDescriptors: buildSortDescriptors()) { (dishes: [Dish]) in
                 List {
                     ForEach(dishes) { dish in
                         HStack {
@@ -35,6 +35,11 @@ struct Menu: View {
         .onAppear {
             getMenuData()
         }
+    }
+    
+    // Funktion zum Sortieren der Menüelemente nach Titel
+    func buildSortDescriptors() -> [NSSortDescriptor] {
+        return [NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))]
     }
     
     // Methode zum Abrufen der Menüdaten
